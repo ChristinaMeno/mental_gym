@@ -1,36 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node {
+typedef struct node {
   int data;
   struct node *next;
-};
+} node;
 
-struct linked_list {
-    struct node *head;
-    struct node *tail;
-}; 
-
-void add(struct linked_list *my_list, int data)
+void add(node **my_list, int data)
 {
-    struct node *new_node = malloc(sizeof(struct node));
+    node *new_node = malloc(sizeof(node));
     new_node->data = data;
-    if (my_list->head == NULL)
+    if (my_list == NULL)
     { 
-        my_list->head = my_list->tail = new_node;
+        *my_list = new_node;
     }
     else
     {
-        my_list->tail->next = new_node;
-        my_list->tail = new_node;
+        new_node->next = *my_list;
+        *my_list = new_node;
     }
     
 }
 
-/* Totally useless, this is not a library function, move along */
-void print_list(struct linked_list *list)
+node *find(node *n, int data)
 {
-    for(struct node *iter = list->head; iter != NULL; iter = iter->next)
+    if (n == NULL)
+    {
+        return NULL;
+    }
+    if (n->data == data)
+    {
+        return n;
+    }
+    else
+    {
+        return find(n->next, data);
+    }
+}
+
+
+/* Totally useless, this is not a library function, move along */
+void print_list(node *list)
+{
+    for(node *iter = list; iter != NULL; iter = iter->next)
     {
         printf("%d\n", iter->data);
     }
@@ -39,13 +51,14 @@ void print_list(struct linked_list *list)
 
 int main()
 {
-    struct linked_list *my_list;
-    my_list = malloc(sizeof(struct linked_list));
-    my_list->head = my_list->tail = NULL;
-    add(my_list, 5);
-    add(my_list, 6);
-    add(my_list, 1);
+    node *my_list = NULL;
+    add(&my_list, 5);
+    add(&my_list, 6);
+    add(&my_list, 1);
     print_list(my_list);
+    node *result = find(my_list, 6);
+    if (result != NULL)
+        printf("%d found\n", result->data);
 
     return 0;
 }

@@ -16,10 +16,20 @@ class SingleLinkedList(object):
             yield current_node.data
             current_node = current_node.next
             
-    def add(self, thing):
+    def append(self, thing):
         if self.head == None:
             self.head = Node(thing)
             self.tail = self.head
         else:
             self.tail.next = Node(thing)
             self.tail = self.tail.next
+
+    def remove(self, value):
+        prev_node = self.head
+        next_node = self.tail
+        for node in self:
+            if node.data = value
+                
+        
+            prev_node = node
+
